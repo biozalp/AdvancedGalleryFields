@@ -12,14 +12,18 @@
 
 // Register Meta Box for Gallery Field
 function register_gallery_meta_box() {
-    add_meta_box(
-        'custom_gallery_field',
-        'Custom Gallery',
-        'render_gallery_meta_box',
-        'post', // Post type
-        'normal',
-        'high'
-    );
+    $enabled_post_types = get_option('custom_gallery_post_types', ['post']);
+    
+    foreach ($enabled_post_types as $post_type) {
+        add_meta_box(
+            'custom_gallery_field',
+            'Custom Gallery',
+            'render_gallery_meta_box',
+            $post_type,
+            'normal',
+            'high'
+        );
+    }
 }
 add_action('add_meta_boxes', 'register_gallery_meta_box');
 
@@ -112,6 +116,58 @@ function save_gallery_meta_box($post_id) {
     }
 }
 add_action('save_post', 'save_gallery_meta_box');
+
+// Add Admin Menu
+function custom_gallery_admin_menu() {
+    add_options_page(
+        'Custom Gallery Settings',
+        'Custom Gallery',
+        'manage_options',
+        'custom-gallery-settings',
+        'custom_gallery_settings_page'
+    );
+}
+add_action('admin_menu', 'custom_gallery_admin_menu');
+
+// Register Settings
+function custom_gallery_register_settings() {
+    register_setting('custom_gallery_settings', 'custom_gallery_post_types');
+}
+add_action('admin_init', 'custom_gallery_register_settings');
+
+// Create Settings Page
+function custom_gallery_settings_page() {
+    $post_types = get_post_types(['public' => true], 'objects');
+    $saved_post_types = get_option('custom_gallery_post_types', ['post']);
+    ?>
+    <div class="wrap">
+        <h1>Custom Gallery Settings</h1>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields('custom_gallery_settings');
+            do_settings_sections('custom_gallery_settings');
+            ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row">Enable for Post Types</th>
+                    <td>
+                        <?php foreach ($post_types as $post_type): ?>
+                            <label>
+                                <input type="checkbox" 
+                                       name="custom_gallery_post_types[]" 
+                                       value="<?php echo esc_attr($post_type->name); ?>"
+                                       <?php checked(in_array($post_type->name, $saved_post_types)); ?>>
+                                <?php echo esc_html($post_type->labels->singular_name); ?>
+                            </label><br>
+                        <?php endforeach; ?>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
 
 // Only load Elementor integration if Elementor is active
 function initialize_elementor_integration() {
