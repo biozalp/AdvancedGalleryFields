@@ -1,0 +1,320 @@
+/* Admin Page Layout */
+.cgf-wrap {
+    margin: 20px 20px 0 0;
+}
+
+.cgf-admin-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.cgf-admin-header h1 {
+    margin: 0;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.cgf-admin-container {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 30px;
+    max-width: 1400px;
+}
+
+/* Main Content Area */
+.cgf-admin-main {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.cgf-admin-main h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Post Type List Styling */
+.cgf-post-type-list {
+    margin: 20px 0;
+    padding: 0;
+    list-style: none;
+}
+
+.cgf-post-type-list li {
+    margin: 10px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.cgf-post-type-list li:hover {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transform: translateY(-1px);
+}
+
+.cgf-post-type-list label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+.cgf-post-type-list input[type="checkbox"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+}
+
+/* Sidebar Styling */
+.cgf-admin-sidebar {
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.cgf-admin-sidebar h3 {
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.cgf-admin-sidebar p {
+    color: #5a6c7d;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+}
+
+.cgf-admin-sidebar ul {
+    margin: 0 0 25px 0;
+    padding: 0 0 0 20px;
+}
+
+.cgf-admin-sidebar li {
+    color: #5a6c7d;
+    font-size: 14px;
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+/* Feature List */
+.cgf-feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+}
+
+.cgf-feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    margin: 8px 0;
+    font-size: 14px;
+    color: #2c3e50;
+    transition: all 0.2s ease;
+}
+
+.cgf-feature-list li:hover {
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transform: translateX(2px);
+}
+
+.cgf-feature-icon {
+    font-size: 18px;
+    color: #3498db;
+}
+
+/* Coffee Button */
+.cgf-coffee-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background: #FF813F;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(255, 129, 63, 0.3);
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.cgf-coffee-button:hover {
+    background: #ff6b1a;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 129, 63, 0.4);
+}
+
+.cgf-coffee-button .dashicons {
+    margin-right: 8px;
+}
+
+/* Gallery Container */
+.custom-gallery-wrapper {
+    margin: 20px 0;
+}
+
+#custom-gallery-container {
+    margin: 15px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    min-height: 120px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+#custom-gallery-container img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+#custom-gallery-container img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.gallery-preview {
+    position: relative;
+}
+
+.gallery-preview img {
+    max-width: 150px;
+    height: auto;
+    margin: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.gallery-item {
+    position: relative;
+    display: inline-block;
+}
+
+.gallery-item .delete-image {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.gallery-item:hover .delete-image {
+    opacity: 1;
+}
+
+.delete-image:hover {
+    background: #ff4444;
+    color: white;
+}
+
+.gallery-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.clear-gallery {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+}
+
+.clear-gallery:hover {
+    background: #c82333;
+}
+
+/* Submit Button */
+.cgf-admin-main .submit {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.cgf-admin-main .button-primary {
+    padding: 8px 20px;
+    height: auto;
+    line-height: 1.4;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Plugin Recommendation */
+.cgf-plugin-recommendation {
+    margin-top: 30px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.cgf-plugin-recommendation h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cgf-plugin-recommendation p {
+    margin-bottom: 15px;
+}
+
+.cgf-plugin-recommendation a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.cgf-plugin-recommendation a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
