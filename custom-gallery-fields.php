@@ -6,12 +6,11 @@
  * Version: 1.0.0
  * Author: Berk Ilgar Ozalp
  * Author URI: https://biozalp.com/wordpress-plugins
- * Text Domain: custom-gallery-fields
  * License: GPL-2.0+	 
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-if (!defined('ABSPATH')) {
+ if (!defined('ABSPATH')) {
     exit;
 }
 
