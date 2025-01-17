@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Custom Gallery Field
- * Description: Adds a custom gallery field to posts and makes it available as an Elementor dynamic tag
+ * Description: Adds a custom gallery field to posts and makes it available to use for editors like Elementor and Bloksy.
  * Version: 1.0
  * Author: Berk Ilgar Ozalp
  */
@@ -119,7 +119,7 @@ add_action('save_post', 'save_gallery_meta_box');
 
 // Add Admin Menu
 function custom_gallery_admin_menu() {
-    add_options_page(
+    add_management_page(
         'Custom Gallery Settings',
         'Custom Gallery',
         'manage_options',
