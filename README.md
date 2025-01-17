@@ -63,10 +63,10 @@ Yes! The gallery field is compatible with any custom field plugin. It does not i
 
 == Screenshots ==
 
-1. Gallery field in post editor
-2. Settings page
-3. Elementor widget options
-4. Example gallery display
+1. ss-1.png
+2. ss-2.png
+3. ss-3.png
+
 
 == Changelog ==
 

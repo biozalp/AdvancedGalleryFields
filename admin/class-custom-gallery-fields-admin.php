@@ -54,67 +54,72 @@ class Custom_Gallery_Fields_Admin {
         $post_types = get_post_types(['public' => true], 'objects');
         $saved_post_types = get_option('custom_gallery_post_types', ['post']);
         ?>
-        <div class="wrap cgf-wrap">
-            <div class="cgf-admin-header">
-                <div>
-                    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-                    <p style="margin: 10px 0 0; opacity: 0.9;">Enhance your content with beautiful, customizable galleries</p>
-                </div>
+        <div class="wrap">
+            <div class="notice-container">
+                <?php do_action('admin_notices'); ?>
             </div>
-
-            <div class="cgf-admin-container">
-                <div class="cgf-admin-main">
-                    <form method="post" action="options.php">
-                        <?php
-                        settings_fields('custom_gallery_settings');
-                        do_settings_sections('custom_gallery_settings');
-                        ?>
-                        <h2>Enable Gallery Fields</h2>
-                        <p class="description">Select which post types should have the custom gallery field available. The gallery field will appear in the editor for the selected post types.</p>
-                        
-                        <ul class="cgf-post-type-list">
-                            <?php foreach ($post_types as $post_type): ?>
-                                <li>
-                                    <label>
-                                        <input type="checkbox"
-                                               name="custom_gallery_post_types[]"
-                                               value="<?php echo esc_attr($post_type->name); ?>"
-                                               <?php checked(in_array($post_type->name, $saved_post_types)); ?>>
-                                        <span class="dashicons dashicons-<?php echo $post_type->name === 'post' ? 'admin-post' : 'admin-page'; ?>"></span>
-                                        <span><?php echo esc_html($post_type->labels->singular_name); ?></span>
-                                    </label>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-
-                        <?php submit_button('Save Settings'); ?>
-                    </form>
+            <div class="cgf-wrap">
+                <div class="cgf-admin-header">
+                    <div>
+                        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+                        <p style="margin: 10px 0 0; opacity: 0.9;">Enhance your content with beautiful, customizable galleries</p>
+                    </div>
                 </div>
 
-                <div class="cgf-admin-sidebar">
-                    
-                    <h3>Support the Development</h3>
-                    <p>If you find this plugin useful, consider supporting its development. Your support helps maintain and improve the plugin with new features and updates!</p>
-                    
-                    <a href="https://www.buymeacoffee.com/biozalp" target="_blank" class="cgf-coffee-button">
-                        <span class="dashicons dashicons-coffee"></span>
-                        Buy me a coffee
-                    </a>
+                <div class="cgf-admin-container">
+                    <div class="cgf-admin-main">
+                        <form method="post" action="options.php">
+                            <?php
+                            settings_fields('custom_gallery_settings');
+                            do_settings_sections('custom_gallery_settings');
+                            ?>
+                            <h2>Enable Gallery Fields</h2>
+                            <p class="description">Select which post types should have the custom gallery field available. The gallery field will appear in the editor for the selected post types.</p>
+                            
+                            <ul class="cgf-post-type-list">
+                                <?php foreach ($post_types as $post_type): ?>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox"
+                                                   name="custom_gallery_post_types[]"
+                                                   value="<?php echo esc_attr($post_type->name); ?>"
+                                                   <?php checked(in_array($post_type->name, $saved_post_types)); ?>>
+                                            <span class="dashicons dashicons-<?php echo $post_type->name === 'post' ? 'admin-post' : 'admin-page'; ?>"></span>
+                                            <span><?php echo esc_html($post_type->labels->singular_name); ?></span>
+                                        </label>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
 
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef;">
-                        <h3>Need Help?</h3>
-                        <p>Check out the <a href="https://wordpress.org/plugins/custom-gallery-fields" target="_blank">plugin documentation</a> or <a href="https://wordpress.org/support/plugin/custom-gallery-fields" target="_blank">support forums</a> for assistance. If you cannot find what you're looking for, please <a href="mailto:berk@biozalp.com" target="_blank">send an email</a>.</p>
+                            <?php submit_button('Save Settings'); ?>
+                        </form>
                     </div>
 
-                    <div class="cgf-plugin-recommendation">
-                        <h3>
-                            Check Out My Other Plugins
-                        </h3>
-                        <p>Love Spotify? Try Spotiembed, my plugin that lets you easily embed Spotify content in your WordPress posts and pages.</p>
-                        <a href="https://wordpress.com/plugins/spotiembed" target="_blank" class="button">
-                            <span class="dashicons dashicons-external" style="margin: 3px 5px 0 -2px;"></span>
-                            View Spotiembed Plugin
+                    <div class="cgf-admin-sidebar">
+                        
+                        <h3>Support the Development</h3>
+                        <p>If you find this plugin useful, consider supporting its development. Your support helps maintain and improve the plugin with new features and updates!</p>
+                        
+                        <a href="https://www.buymeacoffee.com/biozalp" target="_blank" class="cgf-coffee-button">
+                            <span class="dashicons dashicons-coffee"></span>
+                            Buy me a coffee
                         </a>
+
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef;">
+                            <h3>Need Help?</h3>
+                            <p>Check out the <a href="https://wordpress.org/plugins/custom-gallery-fields" target="_blank">plugin documentation</a> or <a href="https://wordpress.org/support/plugin/custom-gallery-fields" target="_blank">support forums</a> for assistance. If you cannot find what you're looking for, please <a href="mailto:berk@biozalp.com" target="_blank">send an email</a>.</p>
+                        </div>
+
+                        <div class="cgf-plugin-recommendation">
+                            <h3>
+                                Check Out My Other Plugins
+                            </h3>
+                            <p>Love Spotify? Try Spotiembed, my plugin that lets you easily embed Spotify content in your WordPress posts and pages.</p>
+                            <a href="https://wordpress.com/plugins/spotiembed" target="_blank" class="button">
+                                <span class="dashicons dashicons-external" style="margin: 3px 5px 0 -2px;"></span>
+                                View Spotiembed Plugin
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
