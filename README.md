@@ -1,5 +1,3 @@
-# Custom Gallery Field with Elementor and Woocommerce Support
-
 === Custom Gallery Fields ===
 Contributors: biozalp
 Tags: gallery, elementor, custom-fields, woocommerce gallery field, custom gallery field
