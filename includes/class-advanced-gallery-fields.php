@@ -3,25 +3,24 @@
  * The core plugin class.
  */
 
-class Custom_Gallery_Fields {
+class Advanced_Gallery_Fields {
     protected $plugin_name;
     protected $version;
     protected $admin;
 
     public function __construct() {
-        $this->plugin_name = 'custom-gallery-fields';
+        $this->plugin_name = 'advanced-gallery-fields';
         $this->version = '1.0.0';
 
         $this->load_dependencies();
-        $this->define_admin_hooks();
     }
 
     private function load_dependencies() {
-        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-custom-gallery-fields-admin.php';
+        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-advanced-gallery-fields-admin.php';
     }
 
     private function define_admin_hooks() {
-        $this->admin = new Custom_Gallery_Fields_Admin($this->plugin_name, $this->version);
+        $this->admin = new Advanced_Gallery_Fields_Admin($this->plugin_name, $this->version);
 
         // Admin menu and settings
         add_action('admin_menu', array($this->admin, 'add_admin_menu'));
@@ -34,6 +33,13 @@ class Custom_Gallery_Fields {
         // Admin scripts and styles
         add_action('admin_enqueue_scripts', array($this->admin, 'enqueue_styles'));
         add_action('admin_enqueue_scripts', array($this->admin, 'enqueue_scripts'));
+    }
+
+    /**
+     * Run the plugin initialization
+     */
+    public function run() {
+        $this->define_admin_hooks();
     }
 
     public function get_plugin_name() {

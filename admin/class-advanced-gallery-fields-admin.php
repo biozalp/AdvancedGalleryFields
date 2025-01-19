@@ -3,7 +3,7 @@
  * The admin-specific functionality of the plugin.
  */
 
-class Custom_Gallery_Fields_Admin {
+class Advanced_Gallery_Fields_Admin {
     private $plugin_name;
     private $version;
 
@@ -38,21 +38,42 @@ class Custom_Gallery_Fields_Admin {
 
     public function add_admin_menu() {
         add_management_page(
-            'Custom Gallery Fields Settings',
-            'Custom Gallery Fields',
+            'Advanced Gallery Fields Settings',
+            'Advanced Gallery Fields',
             'manage_options',
-            'custom-gallery-fields',
+            'advanced-gallery-fields',
             array($this, 'display_settings_page')
         );
     }
 
     public function register_settings() {
-        register_setting('custom_gallery_settings', 'custom_gallery_post_types');
+        register_setting(
+            'advanced_gallery_settings',
+            'advanced_gallery_post_types',
+            array(
+                'type' => 'array',
+                'sanitize_callback' => array($this, 'sanitize_post_types'),
+            )
+        );
+    }
+
+    /**
+     * Sanitize the post types array
+     *
+     * @param array $input Array of post types to sanitize
+     * @return array Sanitized array of post types
+     */
+    public function sanitize_post_types($input) {
+        if (!is_array($input)) {
+            return array('post');
+        }
+        
+        return array_map('sanitize_key', $input);
     }
 
     public function display_settings_page() {
         $post_types = get_post_types(['public' => true], 'objects');
-        $saved_post_types = get_option('custom_gallery_post_types', ['post']);
+        $saved_post_types = get_option('advanced_gallery_post_types', ['post']);
         ?>
         <div class="wrap">
             <div class="notice-container">
@@ -70,8 +91,8 @@ class Custom_Gallery_Fields_Admin {
                     <div class="cgf-admin-main">
                         <form method="post" action="options.php">
                             <?php
-                            settings_fields('custom_gallery_settings');
-                            do_settings_sections('custom_gallery_settings');
+                            settings_fields('advanced_gallery_settings');
+                            do_settings_sections('advanced_gallery_settings');
                             ?>
                             <h2>Enable Gallery Fields</h2>
                             <p class="description">Select which post types should have the custom gallery field available. The gallery field will appear in the editor for the selected post types.</p>
@@ -81,10 +102,10 @@ class Custom_Gallery_Fields_Admin {
                                     <li>
                                         <label>
                                             <input type="checkbox"
-                                                   name="custom_gallery_post_types[]"
+                                                   name="advanced_gallery_post_types[]"
                                                    value="<?php echo esc_attr($post_type->name); ?>"
                                                    <?php checked(in_array($post_type->name, $saved_post_types)); ?>>
-                                            <span class="dashicons dashicons-<?php echo $post_type->name === 'post' ? 'admin-post' : 'admin-page'; ?>"></span>
+                                            <span class="dashicons dashicons-<?php echo esc_attr($post_type->name === 'post' ? 'admin-post' : 'admin-page'); ?>"></span>
                                             <span><?php echo esc_html($post_type->labels->singular_name); ?></span>
                                         </label>
                                     </li>
@@ -107,7 +128,7 @@ class Custom_Gallery_Fields_Admin {
 
                         <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef;">
                             <h3>Need Help?</h3>
-                            <p>Check out the <a href="https://wordpress.org/plugins/custom-gallery-fields" target="_blank">plugin documentation</a> or <a href="https://wordpress.org/support/plugin/custom-gallery-fields" target="_blank">support forums</a> for assistance. If you cannot find what you're looking for, please <a href="mailto:berk@biozalp.com" target="_blank">send an email</a>.</p>
+                            <p>Check out the <a href="https://wordpress.org/plugins/advanced-gallery-fields" target="_blank">plugin documentation</a> or <a href="https://wordpress.org/support/plugin/advanced-gallery-fields" target="_blank">support forums</a> for assistance. If you cannot find what you're looking for, please <a href="mailto:berk@biozalp.com" target="_blank">send an email</a>.</p>
                         </div>
 
                         <div class="cgf-plugin-recommendation">
@@ -128,12 +149,12 @@ class Custom_Gallery_Fields_Admin {
     }
 
     public function register_meta_box() {
-        $enabled_post_types = get_option('custom_gallery_post_types', ['post']);
+        $enabled_post_types = get_option('advanced_gallery_post_types', ['post']);
         
         foreach ($enabled_post_types as $post_type) {
             add_meta_box(
-                'custom_gallery_field',
-                'Custom Gallery Fields',
+                'advanced_gallery_field',
+                'Advanced Gallery Fields',
                 array($this, 'render_meta_box'),
                 $post_type,
                 'normal',
@@ -143,61 +164,100 @@ class Custom_Gallery_Fields_Admin {
     }
 
     public function render_meta_box($post) {
-        // Add nonce for security
-        wp_nonce_field('custom_gallery_nonce', 'custom_gallery_nonce');
-
-        // Get current gallery
-        $gallery_ids = get_post_meta($post->ID, '_custom_gallery', true);
+        wp_nonce_field('advanced_gallery_nonce', 'advanced_gallery_nonce');
+        
+        // Sanitize and validate the gallery IDs when retrieving from database
+        $gallery_ids = get_post_meta($post->ID, '_advanced_gallery', true);
+        $gallery_ids = $this->sanitize_gallery_ids($gallery_ids);
         ?>
-        <div class="gallery-field-container">
-            <div class="gallery-buttons">
-                <button type="button" class="button gallery-button">
-                    <?php _e('Add/Edit Gallery', 'custom-gallery-fields'); ?>
-                </button>
-                <button type="button" class="clear-gallery" style="display: <?php echo empty($gallery_ids) ? 'none' : 'block'; ?>">
-                    <?php _e('Clear Gallery', 'custom-gallery-fields'); ?>
-                </button>
-            </div>
+        <div class="advanced-gallery-wrapper">
+            <input type="hidden" name="gallery_data" id="gallery_data" value="<?php echo esc_attr($gallery_ids); ?>">
+            <button type="button" class="button gallery-button">
+                <?php esc_html_e('Add/Edit Gallery', 'advanced-gallery-fields'); ?>
+            </button>
 
             <div class="gallery-preview">
                 <?php
                 if (!empty($gallery_ids)) {
-                    $gallery_ids_array = explode(',', $gallery_ids);
+                    $gallery_ids_array = array_filter(explode(',', $gallery_ids), 'is_numeric');
                     foreach ($gallery_ids_array as $image_id) {
+                        // Validate that the image ID exists and is an attachment
+                        $image_id = absint($image_id);
+                        if (!$this->is_valid_attachment($image_id)) {
+                            continue;
+                        }
+                        
                         $image = wp_get_attachment_image_src($image_id, 'thumbnail');
                         if ($image) {
                             echo '<div class="gallery-item" data-id="' . esc_attr($image_id) . '">';
-                            echo '<img src="' . esc_url($image[0]) . '" alt="">';
-                            echo '<div class="delete-image" title="' . esc_attr__('Remove Image', 'custom-gallery-fields') . '">';
+                            echo '<img src="' . esc_url($image[0]) . '" alt="' . esc_attr(get_post_meta($image_id, '_wp_attachment_image_alt', true)) . '">';
+                            echo '<div class="delete-image" title="' . esc_attr__('Remove Image', 'advanced-gallery-fields') . '">';
                             echo '<span class="dashicons dashicons-no-alt"></span>';
-                            echo '</div>';
-                            echo '</div>';
+                            echo '</div></div>';
                         }
                     }
                 }
                 ?>
             </div>
-            <input type="hidden" id="gallery_data" name="gallery_data" value="<?php echo esc_attr($gallery_ids); ?>">
         </div>
         <?php
     }
 
     public function save_meta_box($post_id) {
-        if (!isset($_POST['custom_gallery_nonce']) || 
-            !wp_verify_nonce($_POST['custom_gallery_nonce'], 'custom_gallery_nonce')) {
+        // Verify nonce
+        if (!isset($_POST['advanced_gallery_nonce']) || 
+            !wp_verify_nonce($_POST['advanced_gallery_nonce'], 'advanced_gallery_nonce')) {
             return;
         }
 
+        // Check autosave
         if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
             return;
         }
 
+        // Check permissions
         if (!current_user_can('edit_post', $post_id)) {
             return;
         }
 
+        // Sanitize and save gallery data
         if (isset($_POST['gallery_data'])) {
-            update_post_meta($post_id, '_custom_gallery', sanitize_text_field($_POST['gallery_data']));
+            $gallery_data = $this->sanitize_gallery_ids($_POST['gallery_data']);
+            update_post_meta($post_id, '_advanced_gallery', $gallery_data);
         }
+    }
+
+    /**
+     * Sanitize and validate gallery IDs
+     *
+     * @param string $gallery_ids Comma-separated list of gallery image IDs
+     * @return string Sanitized comma-separated list of gallery image IDs
+     */
+    private function sanitize_gallery_ids($gallery_ids) {
+        if (empty($gallery_ids)) {
+            return '';
+        }
+
+        // Convert to array and ensure all values are numeric
+        $ids_array = array_filter(explode(',', $gallery_ids), 'is_numeric');
+        
+        // Convert all IDs to positive integers
+        $ids_array = array_map('absint', $ids_array);
+        
+        // Filter out any invalid attachment IDs
+        $ids_array = array_filter($ids_array, array($this, 'is_valid_attachment'));
+
+        return implode(',', $ids_array);
+    }
+
+    /**
+     * Validate if an ID represents a valid attachment
+     *
+     * @param int $attachment_id The attachment ID to validate
+     * @return bool Whether the attachment ID is valid
+     */
+    private function is_valid_attachment($attachment_id) {
+        $attachment = get_post($attachment_id);
+        return !empty($attachment) && $attachment->post_type === 'attachment';
     }
 }
