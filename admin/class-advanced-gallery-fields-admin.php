@@ -172,7 +172,7 @@ class Advanced_Gallery_Fields_Admin {
         ?>
         <div class="advanced-gallery-wrapper">
             <input type="hidden" name="gallery_data" id="gallery_data" value="<?php echo esc_attr($gallery_ids); ?>">
-            <button type="button" class="button" id="gallery-button">
+            <button type="button" class="button gallery-button">
                 <?php esc_html_e('Add/Edit Gallery', 'advanced-gallery-fields'); ?>
             </button>
 

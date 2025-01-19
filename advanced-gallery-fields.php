@@ -76,7 +76,7 @@ function advanced_gallery_fields_elementor_init() {
         
             protected function get_value(array $options = []) {
                 $post_id = get_the_ID();
-                $gallery_ids = get_post_meta($post_id, '_custom_gallery', true);
+                $gallery_ids = get_post_meta($post_id, '_advanced_gallery', true);
                 
                 if (empty($gallery_ids)) {
                     return [];
@@ -89,12 +89,8 @@ function advanced_gallery_fields_elementor_init() {
                     $attachment = get_post($attachment_id);
                     if ($attachment) {
                         $gallery_data[] = [
-                            'id' => (int)$attachment_id,
+                            'id' => $attachment_id,
                             'url' => wp_get_attachment_url($attachment_id),
-                            'alt' => get_post_meta($attachment_id, '_wp_attachment_image_alt', true),
-                            'caption' => $attachment->post_excerpt,
-                            'description' => $attachment->post_content,
-                            'title' => $attachment->post_title
                         ];
                     }
                 }
@@ -160,7 +156,7 @@ function advanced_gallery_fields_elementor_init() {
         protected function render() {
             $settings = $this->get_settings_for_display();
             $post_id = get_the_ID();
-            $gallery_ids = get_post_meta($post_id, '_custom_gallery', true);
+            $gallery_ids = get_post_meta($post_id, '_advanced_gallery', true);
 
             if (empty($gallery_ids)) {
                 return;

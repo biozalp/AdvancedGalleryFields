@@ -13,7 +13,6 @@ class Advanced_Gallery_Fields {
         $this->version = '1.0.0';
 
         $this->load_dependencies();
-        $this->define_admin_hooks();
     }
 
     private function load_dependencies() {
@@ -34,6 +33,13 @@ class Advanced_Gallery_Fields {
         // Admin scripts and styles
         add_action('admin_enqueue_scripts', array($this->admin, 'enqueue_styles'));
         add_action('admin_enqueue_scripts', array($this->admin, 'enqueue_scripts'));
+    }
+
+    /**
+     * Run the plugin initialization
+     */
+    public function run() {
+        $this->define_admin_hooks();
     }
 
     public function get_plugin_name() {
