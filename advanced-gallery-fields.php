@@ -2,7 +2,7 @@
 /**
  * @wordpress-plugin
  * Plugin Name: Advanced Gallery Fields
- * Description: Adds an advanced gallery field to posts and makes it available to use for editors like Elementor and Bloksy.
+ * Description: Adds an advanced gallery field to posts and makes it available to use for editors like Elementor.
  * Version: 1.0.0
  * Author: Berk Ilgar Ozalp
  * Author URI: https://biozalp.com/

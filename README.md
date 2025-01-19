@@ -1,6 +1,6 @@
-=== Custom Gallery Fields ===
+=== Advanced Gallery Fields ===
 Contributors: biozalp
-Tags: gallery, elementor, custom-fields, woocommerce gallery field, custom gallery field
+Tags: gallery, elementor, custom-fields, woocommerce gallery field, advanced gallery field
 Requires at least: 5.0
 Tested up to: 6.7.1
 Stable tag: 1.0.0
@@ -12,7 +12,7 @@ Add beautiful, customizable gallery fields to your posts and pages with full Ele
 
 == Description ==
 
-Custom Gallery Fields adds a powerful gallery management system to your WordPress posts and pages. Seamlessly integrate with Elementor and other page builders to create stunning image galleries with ease.
+Advanced Gallery Fields adds a powerful gallery management system to your WordPress posts and pages. Seamlessly integrate with Elementor and other page builders to create stunning image galleries with ease.
 
 This plugin is a complete solution for creating galleries in your WordPress posts and pages. It allows you to add and manage multiple images in a visually appealing and user-friendly way.
 
@@ -40,16 +40,16 @@ The plugin provides the dynamic link tag for your gallery to use with any image 
 
 == Installation ==
 
-1. Download the repository from GitHub and upload the plugin files to the `/wp-content/plugins/custom-gallery-fields` directory, or install the plugin through the WordPress plugins screen directly.
+1. Download the repository from GitHub and upload the plugin files to the `/wp-content/plugins/advanced-gallery-fields` directory, or install the plugin through the WordPress plugins screen directly.
 2. Activate the plugin through the 'Plugins' screen in WordPress
-3. Go to Tools -> Custom Gallery Fields to configure which post types should have gallery fields
+3. Go to Tools -> Advanced Gallery Fields to configure which post types should have gallery fields
 4. Start adding galleries to your posts!
 
 == Frequently Asked Questions ==
 
 = Which post types are supported? =
 
-By default, the gallery field is available for Posts. You can enable it for any public post type through the settings page under Tools -> Custom Gallery Fields.
+By default, the gallery field is available for Posts. You can enable it for any public post type through the settings page under Tools -> Advanced Gallery Fields.
 
 = Does it work with Elementor? =
 
@@ -59,7 +59,7 @@ Yes! The plugin enables the dynamic link tag for your gallery to use with any im
 
 Yes! The gallery field is compatible with any custom field plugin. It does not interfere with the tags of other custom fields.
 
-== Screenshots ==
+== Screenshots ==   
 
 1. ss-1.png
 2. ss-2.png
@@ -74,14 +74,14 @@ Yes! The gallery field is compatible with any custom field plugin. It does not i
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of Custom Gallery Fields.
+Initial release of Advanced Gallery Fields.
 
 == Support ==
 
 For support, please:
 
-1. Check the [plugin documentation](https://wordpress.org/plugins/custom-gallery-fields)
-2. Visit the [support forums](https://wordpress.org/support/plugin/custom-gallery-fields)
+1. Check the [plugin documentation](https://wordpress.org/plugins/advanced-gallery-fields)
+2. Visit the [support forums](https://wordpress.org/support/plugin/advanced-gallery-fields)
 3. Email: berk@biozalp.com
 
 == Other Plugins ==
