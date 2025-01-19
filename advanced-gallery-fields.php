@@ -1,63 +1,69 @@
 <?php
 /**
  * @wordpress-plugin
- * Plugin Name: Custom Gallery Fields
- * Description: Adds a custom gallery field to posts and makes it available to use for editors like Elementor and Bloksy.
+ * Plugin Name: Advanced Gallery Fields
+ * Description: Adds an advanced gallery field to posts and makes it available to use for editors like Elementor and Bloksy.
  * Version: 1.0.0
  * Author: Berk Ilgar Ozalp
- * Author URI: https://biozalp.com/wordpress-plugins
+ * Author URI: https://biozalp.com/
  * License: GPL-2.0+	 
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
- if (!defined('ABSPATH')) {
-    exit;
+if (!defined('WPINC')) {
+    die;
 }
 
 /**
  * Currently plugin version.
  */
-define('CUSTOM_GALLERY_FIELDS_VERSION', '1.0.0');
+define('ADVANCED_GALLERY_FIELDS_VERSION', '1.0.0');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path(__FILE__) . 'includes/class-custom-gallery-fields.php';
+require plugin_dir_path(__FILE__) . 'includes/class-advanced-gallery-fields.php';
 
 /**
- * Begins execution of the plugin.
+ * Initialize the plugin
  */
-function run_custom_gallery_fields() {
-    $plugin = new Custom_Gallery_Fields();
+function advanced_gallery_fields_init() {
+    $plugin = new Advanced_Gallery_Fields();
+    $plugin->run();
 }
-run_custom_gallery_fields();
+advanced_gallery_fields_init();
 
 /**
  * Check if Elementor is installed and activated
+ *
+ * @return bool
  */
-function is_elementor_activated() {
+function advanced_gallery_fields_has_elementor() {
     return did_action('elementor/loaded');
 }
 
 /**
  * Initialize Elementor integration
  */
-function initialize_elementor_integration() {
+function advanced_gallery_fields_elementor_init() {
     // If Elementor is not active, return early
-    if (!is_elementor_activated()) {
+    if (!advanced_gallery_fields_has_elementor()) {
         return;
     }
 
     // Register Dynamic Tag
     add_action('elementor/dynamic_tags/register', function($dynamic_tags) {
-        class Gallery_Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
+        /**
+         * Dynamic tag for Elementor integration
+         */
+        class Advanced_Gallery_Fields_Dynamic_Tag extends \Elementor\Core\DynamicTags\Data_Tag {
             public function get_name() {
-                return 'custom-gallery-field';
+                return 'advanced-gallery-field';
             }
         
             public function get_title() {
-                return __('Custom Gallery Field', 'custom-gallery-fields');
+                return __('Advanced Gallery Field', 'advanced-gallery-fields');
             }
         
             public function get_group() {
@@ -97,7 +103,7 @@ function initialize_elementor_integration() {
             }
         }
         
-        $dynamic_tags->register(new Gallery_Dynamic_Tag());
+        $dynamic_tags->register(new Advanced_Gallery_Fields_Dynamic_Tag());
     });
 
     // Make sure the Elementor classes are available
@@ -106,15 +112,15 @@ function initialize_elementor_integration() {
     }
 
     /**
-     * Custom Gallery Fields Widget for Elementor
+     * Advanced Gallery Fields Widget for Elementor
      */
-    class Custom_Gallery_Fields_Widget extends \Elementor\Widget_Base {
+    class Advanced_Gallery_Fields_Widget extends \Elementor\Widget_Base {
         public function get_name() {
-            return 'custom_gallery_fields';
+            return 'advanced-gallery-fields';
         }
 
         public function get_title() {
-            return __('Custom Gallery Fields', 'custom-gallery-fields');
+            return __('Advanced Gallery Fields', 'advanced-gallery-fields');
         }
 
         public function get_icon() {
@@ -129,7 +135,7 @@ function initialize_elementor_integration() {
             $this->start_controls_section(
                 'content_section',
                 [
-                    'label' => __('Content', 'custom-gallery-fields'),
+                    'label' => __('Content', 'advanced-gallery-fields'),
                     'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
                 ]
             );
@@ -137,13 +143,13 @@ function initialize_elementor_integration() {
             $this->add_control(
                 'gallery_style',
                 [
-                    'label' => __('Gallery Style', 'custom-gallery-fields'),
+                    'label' => __('Gallery Style', 'advanced-gallery-fields'),
                     'type' => \Elementor\Controls_Manager::SELECT,
                     'default' => 'grid',
                     'options' => [
-                        'grid' => __('Grid', 'custom-gallery-fields'),
-                        'masonry' => __('Masonry', 'custom-gallery-fields'),
-                        'carousel' => __('Carousel', 'custom-gallery-fields'),
+                        'grid' => __('Grid', 'advanced-gallery-fields'),
+                        'masonry' => __('Masonry', 'advanced-gallery-fields'),
+                        'carousel' => __('Carousel', 'advanced-gallery-fields'),
                     ],
                 ]
             );
@@ -160,10 +166,17 @@ function initialize_elementor_integration() {
                 return;
             }
 
-            $gallery_ids_array = explode(',', $gallery_ids);
-            echo '<div class="custom-gallery ' . esc_attr($settings['gallery_style']) . '">';
+            // Sanitize and validate gallery IDs
+            $gallery_ids_array = array_filter(explode(',', $gallery_ids), 'is_numeric');
+            $gallery_ids_array = array_map('absint', $gallery_ids_array);
+
+            echo '<div class="advanced-gallery ' . esc_attr($settings['gallery_style']) . '">';
             foreach ($gallery_ids_array as $image_id) {
-                echo wp_get_attachment_image($image_id, 'large');
+                $image_alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
+                $image_html = wp_get_attachment_image($image_id, 'large', false, array('alt' => esc_attr($image_alt)));
+                if ($image_html) {
+                    echo wp_kses_post($image_html);
+                }
             }
             echo '</div>';
         }
@@ -171,34 +184,45 @@ function initialize_elementor_integration() {
 
     // Register widget with Elementor
     add_action('elementor/widgets/register', function($widgets_manager) {
-        $widgets_manager->register(new Custom_Gallery_Fields_Widget());
+        $widgets_manager->register(new Advanced_Gallery_Fields_Widget());
     });
 }
 
 // Initialize Elementor integration after Elementor is loaded
-add_action('plugins_loaded', 'initialize_elementor_integration');
+add_action('plugins_loaded', 'advanced_gallery_fields_elementor_init');
 
 /**
  * Add settings link to plugin page
+ *
+ * @param array $links Existing plugin action links
+ * @return array Modified plugin action links
  */
-function custom_gallery_fields_plugin_action_links($links) {
+function advanced_gallery_fields_add_action_links($links) {
     $plugin_links = array(
-        '<a href="' . admin_url('tools.php?page=custom-gallery-fields') . '">' . __('Settings', 'custom-gallery-fields') . '</a>'
+        '<a href="' . admin_url('tools.php?page=advanced-gallery-fields') . '">' . __('Settings', 'advanced-gallery-fields') . '</a>'
     );
     return array_merge($plugin_links, $links);
 }
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'custom_gallery_fields_plugin_action_links');
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'advanced_gallery_fields_add_action_links');
 
 /**
  * Add More Plugins link to plugin meta
+ *
+ * @param array $links Existing plugin row meta
+ * @param string $file Plugin base file
+ * @return array Modified plugin row meta
  */
-function custom_gallery_fields_plugin_row_meta($links, $file) {
+function advanced_gallery_fields_add_row_meta($links, $file) {
     if (plugin_basename(__FILE__) === $file) {
         $row_meta = array(
-            'more_plugins' => '<a href="https://biozalp.com/wordpress-plugins" target="_blank">' . __('More Plugins', 'custom-gallery-fields') . '</a>'
+            'more_plugins' => sprintf(
+                '<a href="%s" target="_blank">%s</a>',
+                esc_url('https://biozalp.com/wordpress-plugins'),
+                esc_html__('More Plugins', 'advanced-gallery-fields')
+            )
         );
         return array_merge($links, $row_meta);
     }
     return $links;
 }
-add_filter('plugin_row_meta', 'custom_gallery_fields_plugin_row_meta', 10, 2);
+add_filter('plugin_row_meta', 'advanced_gallery_fields_add_row_meta', 10, 2);
