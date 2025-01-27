@@ -206,7 +206,11 @@ class Advanced_Gallery_Fields_Admin {
     public function save_meta_box($post_id) {
         // Verify nonce
         if (!isset($_POST['advanced_gallery_nonce']) || 
-            !wp_verify_nonce($_POST['advanced_gallery_nonce'], 'advanced_gallery_nonce')) {
+            !wp_verify_nonce(
+                sanitize_text_field(wp_unslash($_POST['advanced_gallery_nonce'])), 
+                'advanced_gallery_nonce'
+            )
+        ) {
             return;
         }
 
@@ -222,8 +226,10 @@ class Advanced_Gallery_Fields_Admin {
 
         // Sanitize and save gallery data
         if (isset($_POST['gallery_data'])) {
-            $gallery_data = $this->sanitize_gallery_ids($_POST['gallery_data']);
-            update_post_meta($post_id, '_advanced_gallery', $gallery_data);
+            $gallery_data = $this->sanitize_gallery_ids(sanitize_text_field(wp_unslash($_POST['gallery_data'])));
+            if ($gallery_data !== false) {
+                update_post_meta($post_id, '_advanced_gallery', $gallery_data);
+            }
         }
     }
 
@@ -231,23 +237,41 @@ class Advanced_Gallery_Fields_Admin {
      * Sanitize and validate gallery IDs
      *
      * @param string $gallery_ids Comma-separated list of gallery image IDs
-     * @return string Sanitized comma-separated list of gallery image IDs
+     * @return string|false Sanitized comma-separated list of gallery image IDs, or false on error
      */
     private function sanitize_gallery_ids($gallery_ids) {
         if (empty($gallery_ids)) {
             return '';
         }
 
+        // Basic input validation
+        if (!is_string($gallery_ids)) {
+            return false;
+        }
+
         // Convert to array and ensure all values are numeric
-        $ids_array = array_filter(explode(',', $gallery_ids), 'is_numeric');
+        $ids_array = array_filter(
+            explode(',', $gallery_ids), 
+            function($value) {
+                return is_numeric(trim($value));
+            }
+        );
         
-        // Convert all IDs to positive integers
-        $ids_array = array_map('absint', $ids_array);
+        if (empty($ids_array)) {
+            return false;
+        }
+
+        // Convert all IDs to positive integers and remove duplicates
+        $ids_array = array_unique(array_map('absint', $ids_array));
         
         // Filter out any invalid attachment IDs
-        $ids_array = array_filter($ids_array, array($this, 'is_valid_attachment'));
+        $valid_ids = array_filter($ids_array, array($this, 'is_valid_attachment'));
 
-        return implode(',', $ids_array);
+        if (empty($valid_ids)) {
+            return false;
+        }
+
+        return implode(',', $valid_ids);
     }
 
     /**
