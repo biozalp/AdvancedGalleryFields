@@ -182,6 +182,52 @@
     margin: 20px 0;
 }
 
+/* Sortable Gallery Styles */
+.gallery-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.gallery-item {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: move; /* Indicates item is draggable */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Placeholder style during drag */
+.gallery-item-placeholder {
+    border: 2px dashed #3498db;
+    background-color: rgba(52, 152, 219, 0.1);
+    border-radius: 4px;
+    width: 150px;
+    height: 150px;
+}
+
+/* Style for the item being dragged */
+.ui-sortable-helper {
+    transform: rotate(2deg) scale(1.02);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+
 #custom-gallery-container {
     margin: 15px 0;
     padding: 20px;
@@ -210,19 +256,29 @@
 
 .gallery-preview {
     position: relative;
-}
-
-.gallery-preview img {
-    max-width: 150px;
-    height: auto;
-    margin: 5px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
 }
 
 .gallery-item {
     position: relative;
     display: inline-block;
+    width: 150px;
+    height: 150px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    cursor: move; /* Indicates item is draggable */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
 .gallery-item .delete-image {
@@ -240,6 +296,7 @@
     opacity: 0;
     transition: opacity 0.2s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10; /* Ensure it's above the image */
 }
 
 .gallery-item:hover .delete-image {

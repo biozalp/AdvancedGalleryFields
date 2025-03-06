@@ -27,10 +27,15 @@ class Advanced_Gallery_Fields_Admin {
 
     public function enqueue_scripts() {
         wp_enqueue_media();
+        
+        // Enqueue jQuery UI for sortable functionality
+        wp_enqueue_script('jquery-ui-core');
+        wp_enqueue_script('jquery-ui-sortable');
+        
         wp_enqueue_script(
             $this->plugin_name,
             plugin_dir_url(__FILE__) . 'js/gallery-admin.js',
-            array('jquery'),
+            array('jquery', 'jquery-ui-sortable'),
             $this->version,
             false
         );
@@ -187,10 +192,10 @@ class Advanced_Gallery_Fields_Admin {
                             continue;
                         }
                         
-                        $image = wp_get_attachment_image_src($image_id, 'thumbnail');
-                        if ($image) {
+                        $image_html = wp_get_attachment_image($image_id, 'thumbnail');
+                        if ($image_html) {
                             echo '<div class="gallery-item" data-id="' . esc_attr($image_id) . '">';
-                            echo '<img src="' . esc_url($image[0]) . '" alt="' . esc_attr(get_post_meta($image_id, '_wp_attachment_image_alt', true)) . '">';
+                            echo wp_kses_post($image_html);
                             echo '<div class="delete-image" title="' . esc_attr__('Remove Image', 'advanced-gallery-fields') . '">';
                             echo '<span class="dashicons dashicons-no-alt"></span>';
                             echo '</div></div>';

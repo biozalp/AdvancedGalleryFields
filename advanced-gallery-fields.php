@@ -3,7 +3,7 @@
  * @wordpress-plugin
  * Plugin Name: Advanced Gallery Fields
  * Description: Adds an advanced gallery field to posts and makes it available to use for editors like Elementor.
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Berk Ilgar Ozalp
  * Author URI: https://biozalp.com/
  * License: GPL-2.0+	 

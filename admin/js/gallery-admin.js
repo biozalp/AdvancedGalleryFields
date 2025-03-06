@@ -4,6 +4,34 @@ jQuery(document).ready(function($) {
     var $galleryData = $('#gallery_data');
     var $clearButton = $('.clear-gallery');
 
+    // Initialize sortable for drag-and-drop reordering
+    function initSortable() {
+        if ($galleryPreview.children().length > 1) {
+            $galleryPreview.sortable({
+                items: '.gallery-item',
+                cursor: 'move',
+                opacity: 0.7,
+                placeholder: 'gallery-item-placeholder',
+                update: function() {
+                    updateGalleryOrder();
+                }
+            });
+            $galleryPreview.disableSelection();
+        }
+    }
+
+    // Update the hidden input with the new order of images
+    function updateGalleryOrder() {
+        var ids = [];
+        $galleryPreview.find('.gallery-item').each(function() {
+            ids.push($(this).data('id'));
+        });
+        $galleryData.val(ids.join(','));
+    }
+
+    // Initialize sortable on page load
+    initSortable();
+
     // Open media library
     $('.gallery-button').on('click', function(e) {
         e.preventDefault();
@@ -39,9 +67,19 @@ jQuery(document).ready(function($) {
                 html += '</div>';
             });
 
-            $galleryPreview.html(html);
-            $galleryData.val(ids.join(','));
+            // If there are existing images, append the new ones
+            if ($galleryPreview.children().length > 0) {
+                $galleryPreview.append(html);
+                // Get all current IDs and update the input
+                updateGalleryOrder();
+            } else {
+                $galleryPreview.html(html);
+                $galleryData.val(ids.join(','));
+            }
             $clearButton.show();
+            
+            // Re-initialize sortable after adding new images
+            initSortable();
         });
 
         frame.open();
