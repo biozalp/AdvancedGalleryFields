@@ -61,9 +61,9 @@ Yes! The gallery field is compatible with any custom field plugin. It does not i
 
 == Screenshots ==   
 
-1. screenshots/ss-1.png
-2. screenshots/ss-2.png
-3. screenshots/ss-3.png
+1. ss-1.png
+2. ss-2.png
+3. ss-3.png
 
 
 == Changelog ==
