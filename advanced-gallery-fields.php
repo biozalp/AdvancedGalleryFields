@@ -3,10 +3,10 @@
  * @wordpress-plugin
  * Plugin Name: Advanced Gallery Fields
  * Description: Adds an advanced gallery field to posts and makes it available to use for editors like Elementor.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Berk Ilgar Ozalp
  * Author URI: https://biozalp.com/
- * License: GPL-2.0+	 
+ * License: GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
@@ -17,7 +17,7 @@ if (!defined('WPINC')) {
 /**
  * Currently plugin version.
  */
-define('ADVANCED_GALLERY_FIELDS_VERSION', '1.0.0');
+define('ADVANCED_GALLERY_FIELDS_VERSION', '1.0.4');
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -61,30 +61,30 @@ function advanced_gallery_fields_elementor_init() {
             public function get_name() {
                 return 'advanced-gallery-field';
             }
-        
+
             public function get_title() {
                 return __('Advanced Gallery Field', 'advanced-gallery-fields');
             }
-        
+
             public function get_group() {
                 return 'media';
             }
-        
+
             public function get_categories() {
                 return ['gallery'];
             }
-        
+
             protected function get_value(array $options = []) {
                 $post_id = get_the_ID();
                 $gallery_ids = get_post_meta($post_id, '_advanced_gallery', true);
-                
+
                 if (empty($gallery_ids)) {
                     return [];
                 }
-                
+
                 $gallery_ids_array = explode(',', $gallery_ids);
                 $gallery_data = [];
-                
+
                 foreach ($gallery_ids_array as $attachment_id) {
                     $attachment = get_post($attachment_id);
                     if ($attachment) {
@@ -94,11 +94,11 @@ function advanced_gallery_fields_elementor_init() {
                         ];
                     }
                 }
-                
+
                 return $gallery_data;
             }
         }
-        
+
         $dynamic_tags->register(new Advanced_Gallery_Fields_Dynamic_Tag());
     });
 

@@ -2,8 +2,8 @@
 Contributors: biozalp
 Tags: gallery, elementor, custom-fields, woocommerce gallery field, advanced gallery field
 Requires at least: 5.0
-Tested up to: 6.7.1
-Stable tag: 1.0.3
+Tested up to: 6.8.1
+Stable tag: 1.0.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -59,14 +59,17 @@ Yes! The plugin enables the dynamic link tag for your gallery to use with any im
 
 Yes! The gallery field is compatible with any custom field plugin. It does not interfere with the tags of other custom fields.
 
-== Screenshots ==   
+== Screenshots ==
 
-1. screenshots/ss-1.png
-2. screenshots/ss-2.png
-3. screenshots/ss-3.png
+1. /screenshots/ss-1.png
+2. /screenshots/ss-2.png
+3. /screenshots/ss-3.png
 
 
 == Changelog ==
+
+= 1.0.4 =
+* WP 6.8.1 compatibility.
 
 = 1.0.3 =
 * Implemeneted the ability to drag and drop to reorder images.
